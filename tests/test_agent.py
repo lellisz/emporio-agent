@@ -114,3 +114,7 @@ def test_prompt_enforces_english_and_keeps_rules():
     assert "R$ 1.299,00" in p
     assert "not cumulative" in p and "PIX" in p
     assert p.index("TOOL RULES") < p.index("BUSINESS RULES")
+
+
+def test_prompt_forbids_inventing_return_procedures():
+    assert "ONLY the options, deadlines and conditions" in SYSTEM_PROMPT

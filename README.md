@@ -2,7 +2,7 @@
 
 Mel is a text-based support agent for a fictional musical-instrument store in Campo Grande, MS (Brazil). It answers store-info questions, looks up product prices and availability, applies the store policies (returns, payment, shipping, promotions, warranty) and checks order status — through **function calling** over an **open model served by NVIDIA** (hosted API or a local NIM container).
 
-> **Status of live behavior.** The agent has been run against the **NVIDIA hosted API** with `mistralai/mistral-large-4-1t-a52b`; the five transcripts in `examples/` were produced that way by `scripts/run_examples.py`. It has **never been run against a local NIM container**. Only a few manual conversations were checked, and tool-calling reliability has not been measured. Data cleaning, BM25 search, all business tools, history and the agent loop (with scripted fake responses) are covered by offline tests: `python -m pytest -q` → 61 passed.
+> **Status of live behavior.** The agent has been run against the **NVIDIA hosted API** with `mistralai/mistral-large-4-1t-a52b`; the five transcripts in `examples/` were produced that way by `scripts/run_examples.py`. It has **never been run against a local NIM container**. Only a few manual conversations were checked, and tool-calling reliability has not been measured. Data cleaning, BM25 search, all business tools, history and the agent loop (with scripted fake responses) are covered by offline tests: `python -m pytest -q` → 62 passed.
 
 Mel always replies **in English**, even if the customer writes in Portuguese. Tool output and policy text stay in Portuguese and are translated by the model.
 
@@ -25,11 +25,11 @@ CLI options: `--session NAME` (separate conversation history), `--reset` (clear 
 
 1. Create a key at <https://build.nvidia.com> (starts with `nvapi-`).
 2. In `.env`:
-   ```
-   NVIDIA_API_KEY=nvapi-...
-   NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
-   EMPORIO_MODEL=mistralai/mistral-large-4-1t-a52b
-   ```
+    ```
+    NVIDIA_API_KEY=nvapi-...
+    NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
+    EMPORIO_MODEL=mistralai/mistral-large-4-1t-a52b
+    ```
 
 **Choosing a model.** `meta/llama-3.1-70b-instruct` is end-of-life on the hosted API (HTTP 410, EOL 2026-08-26). Many models listed by `GET /v1/models` return HTTP 404 for a given account, so the list is not proof of access. Of 59 candidates tested with tool calling, only 9 worked — for example `mistralai/mistral-large-4-1t-a52b` (the default), `nvidia/nemotron-3-ultra-550b-a55b`, `minimaxai/minimax-m3.1-flash` and `poolside/laguna-xs-2.1`. Before switching `EMPORIO_MODEL`, probe the model with a single request containing one user message and a `tools` array, and check that it returns HTTP 200 with a `tool_calls` response.
 
